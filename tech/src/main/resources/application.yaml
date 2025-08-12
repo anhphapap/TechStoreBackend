@@ -10,3 +10,6 @@ spring:
     password: Admin@123
   jpa:
     show-sql: true
+
+jwt:
+  signerKey: "JT1u3UntCMv2FeJDKiAfNLwJYmujvLb+/GMYR69NYNhYZpJkGNTPAyNSk7tlJyRL"

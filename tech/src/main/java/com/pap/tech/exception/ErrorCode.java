@@ -6,7 +6,9 @@ public enum ErrorCode {
     EMAIL_EXISTED(1002, "Email này đã được đăng ký trước đó"),
     USERNAME_INVALID(1003, "Tên đăng nhập phải có ít nhất 3 ký tự"),
     PASSWORD_INVALID(1004, "Mật khẩu phải có ít nhất 6 ký tự"),
-    EMAIL_INVALID(1004, "Email sai định dạng"),
+    EMAIL_INVALID(1005, "Email sai định dạng"),
+    USER_NOT_EXISTED(1006, "Người dùng không tồn tại"),
+    UNAUTHENTICATED(1007, "Sai tài khoản hoặc mật khẩu"),
     ;
 
     ErrorCode(int code, String message) {
