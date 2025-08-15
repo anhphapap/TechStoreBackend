@@ -12,7 +12,9 @@ import jakarta.validation.Valid;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,12 +23,13 @@ import java.util.List;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+@Slf4j
 public class UserController {
     UserService userService;
     UserMapper  userMapper;
 
     @PostMapping
-    public ApiResponse<UserResponse>createUser(@RequestBody @Valid UserCreationRequest request){
+    ApiResponse<UserResponse>createUser(@RequestBody @Valid UserCreationRequest request){
         ApiResponse<UserResponse> apiResponse = new ApiResponse<>();
 
         apiResponse.setResult(userMapper.toUserResponse(userService.createUser(request)));
@@ -34,23 +37,43 @@ public class UserController {
     }
 
     @GetMapping
-    public List<User> getUsers(){
-        return userService.getUsers();
+    ApiResponse<List<UserResponse>> getUsers(){
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+
+        log.info("Username: {}", auth.getName());
+        log.info("Role: {}", auth.getAuthorities());
+
+        return ApiResponse.<List<UserResponse>>builder()
+                .result(userService.getUsers())
+                .build();
     }
 
     @GetMapping("/{userId}")
-    public UserResponse getUser(@PathVariable("userId") String userId){
-        return userService.getUser(userId);
+    ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId){
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getUser(userId))
+                .build();
     }
 
     @PutMapping("/{userId}")
-    public UserResponse updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserUpdateRequest request){
-        return userService.updateRequest(userId, request);
+    ApiResponse<UserResponse> updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserUpdateRequest request){
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.updateRequest(userId, request))
+                .build();
     }
 
     @DeleteMapping("/{userId}")
-    public String deleteUser(@PathVariable("userId") String userId){
+    ApiResponse deleteUser(@PathVariable("userId") String userId){
         userService.deleteUser(userId);
-        return "Xóa người dùng thành công";
+        return ApiResponse.builder()
+                .message("Xóa người dùng thành công")
+                .build();
+    }
+
+    @GetMapping("/profile")
+    ApiResponse<UserResponse> getUserProfile(){
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.getProfile())
+                .build();
     }
 }

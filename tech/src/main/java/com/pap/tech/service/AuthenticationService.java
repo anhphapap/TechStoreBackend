@@ -9,6 +9,7 @@ import com.pap.tech.dto.request.AuthenticationRequest;
 import com.pap.tech.dto.request.IntrospectRequest;
 import com.pap.tech.dto.response.AuthenticationResponse;
 import com.pap.tech.dto.response.IntrospectResponse;
+import com.pap.tech.entity.User;
 import com.pap.tech.exception.AppException;
 import com.pap.tech.exception.ErrorCode;
 import com.pap.tech.repository.UserRepository;
@@ -50,7 +51,7 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
-        var token = generateToken(request.getUsername());
+        var token = generateToken(user);
 
         return AuthenticationResponse.builder()
                 .token(token)
@@ -74,17 +75,17 @@ public class AuthenticationService {
                 .build();
     }
 
-    private String generateToken(String username) {
+    private String generateToken(User user) {
         JWSHeader jwsHeader = new JWSHeader(JWSAlgorithm.HS512);
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
-                .subject(username)
+                .subject(user.getUsername())
                 .issuer("pap.com")
                 .issueTime(new Date())
                 .expirationTime(new Date(
                         Instant.now().plus(1, ChronoUnit.HOURS).toEpochMilli()
                 ))
-                .claim("custom", "custom")
+                .claim("scope", user.getRole())
                 .build();
 
         Payload payload = new Payload(claimsSet.toJSONObject());

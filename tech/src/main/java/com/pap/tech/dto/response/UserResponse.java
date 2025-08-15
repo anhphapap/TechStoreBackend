@@ -18,4 +18,5 @@ public class UserResponse {
     String address;
     String fullname;
     LocalDate birthday;
+    String role;
 }

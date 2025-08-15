@@ -12,7 +12,11 @@ import lombok.experimental.FieldDefaults;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse <T>{
     @Builder.Default
-    int code = 1000;
+    Integer code = 1000;
     String message;
     T result;
+    Integer page;
+    Integer pageSize;
+    Integer totalPages;
+    Integer totalCount;
 }

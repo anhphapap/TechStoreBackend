@@ -7,24 +7,19 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    String username;
-    String password;
-    String email;
-    String phone;
-    String address;
-    String fullname;
-    LocalDate birthday;
-    String role;
+    String name;
+    Long price;
+    String image;
+    double avgRating;
+    int ratingCount;
 }
