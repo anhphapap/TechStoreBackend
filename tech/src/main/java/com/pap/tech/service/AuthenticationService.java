@@ -12,6 +12,7 @@ import com.pap.tech.dto.response.IntrospectResponse;
 import com.pap.tech.entity.User;
 import com.pap.tech.exception.AppException;
 import com.pap.tech.exception.ErrorCode;
+import com.pap.tech.mapper.UserMapper;
 import com.pap.tech.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,7 @@ import java.util.Date;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class AuthenticationService {
     UserRepository userRepository;
+    UserMapper userMapper;
 
     @NonFinal
     @Value("${jwt.signerKey}")
@@ -56,6 +60,7 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .token(token)
                 .authenticated(true)
+                .user(userMapper.toUserResponse(user))
                 .build();
     }
 

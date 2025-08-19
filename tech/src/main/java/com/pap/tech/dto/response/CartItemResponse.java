@@ -8,8 +8,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
-    String token;
-    boolean authenticated;
-    UserResponse user;
+public class CartItemResponse {
+    String productId;
+    String productName;
+    String productImage;
+    double productPrice;
+    int quantity;
 }

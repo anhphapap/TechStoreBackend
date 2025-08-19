@@ -3,11 +3,13 @@ package com.pap.tech.service;
 import com.pap.tech.dto.request.UserCreationRequest;
 import com.pap.tech.dto.request.UserUpdateRequest;
 import com.pap.tech.dto.response.UserResponse;
+import com.pap.tech.entity.Cart;
 import com.pap.tech.entity.User;
 import com.pap.tech.enums.Role;
 import com.pap.tech.exception.AppException;
 import com.pap.tech.exception.ErrorCode;
 import com.pap.tech.mapper.UserMapper;
+import com.pap.tech.repository.CartRepository;
 import com.pap.tech.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserService {
     UserRepository userRepository;
+    CartRepository cartRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
 
@@ -45,10 +48,18 @@ public class UserService {
 
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-
         user.setRole(Role.USER.name());
 
-        return userRepository.save(user);
+        userRepository.save(user);
+
+        Cart cart = Cart.builder()
+                .user(user)
+                .build();
+        cartRepository.save(cart);
+
+        user.setCart(cart);
+
+        return user;
     }
 
     public UserResponse getProfile(){

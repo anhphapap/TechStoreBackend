@@ -4,26 +4,25 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+@Table(name = "cartitem")
+public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    String username;
-    String password;
-    String email;
-    String phone;
-    String address;
-    String fullname;
-    LocalDate birthday;
-    String role;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+
+    @ManyToOne
+    @JoinColumn(name = "cartid", referencedColumnName = "id")
     Cart cart;
+
+    @ManyToOne
+    @JoinColumn(name = "productid", referencedColumnName = "id")
+    Product product;
+
+    int quantity;
 }
