@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests ->
                 requests.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS ).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products" ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/**" ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->

@@ -1,6 +1,15 @@
 package com.pap.tech.service;
 
+import com.pap.tech.dto.response.ProductResponse;
 import com.pap.tech.entity.Product;
+import com.pap.tech.entity.ProductAttribute;
+import com.pap.tech.entity.ProductImage;
+import com.pap.tech.exception.AppException;
+import com.pap.tech.exception.ErrorCode;
+import com.pap.tech.mapper.ProductAttributeMapper;
+import com.pap.tech.mapper.ProductImageMapper;
+import com.pap.tech.repository.ProductAttributeRepository;
+import com.pap.tech.repository.ProductImageRepository;
 import com.pap.tech.repository.ProductRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +20,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +30,10 @@ import org.springframework.stereotype.Service;
 public class ProductService{
     int PAGE_SIZE = 16;
     ProductRepository productRepository;
+    ProductImageRepository productImageRepository;
+    ProductAttributeRepository productAttributeRepository;
+    ProductImageMapper productImageMapper;
+    ProductAttributeMapper productAttributeMapper;
 
     public Page<Product> getProducts(String sort, int page, String search) {
         Sort sortConfig = Sort.unsorted();
@@ -36,5 +52,14 @@ public class ProductService{
         return productRepository.findAll(pageable);
     }
 
-
+    public ProductResponse getProduct(String id) {
+        Product product = productRepository.findById(id).orElse(null);
+        List<ProductImage> listImages = productImageRepository.findByProduct_Id(id, Sort.by(Sort.Direction.ASC, "url"));
+        List<ProductAttribute> listAttributes = productAttributeRepository.findByProduct_Id(id);
+        return ProductResponse.builder()
+                .product(product)
+                .productImages(listImages.stream().map(productImageMapper::toProductImageResponse).collect(Collectors.toList()))
+                .productAttributes(listAttributes.stream().map(productAttributeMapper::toProductAttributeResponse).collect(Collectors.toList()))
+                .build();
+    }
 }

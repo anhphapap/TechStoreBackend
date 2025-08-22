@@ -1,6 +1,7 @@
 package com.pap.tech.controller;
 
 import com.pap.tech.dto.response.ApiResponse;
+import com.pap.tech.dto.response.ProductResponse;
 import com.pap.tech.entity.Product;
 import com.pap.tech.service.ProductService;
 import lombok.AccessLevel;
@@ -8,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,5 +35,10 @@ public class ProductController {
                 .build();
     }
 
-
+    @GetMapping("/{id}")
+    ApiResponse<ProductResponse> getProduct( @PathVariable String id){
+        return ApiResponse.<ProductResponse>builder()
+                .result(productService.getProduct(id))
+                .build();
+    }
 }
