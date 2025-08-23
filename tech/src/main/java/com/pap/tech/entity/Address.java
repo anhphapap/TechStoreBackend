@@ -4,25 +4,27 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDate;
-
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class User {
+public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
-    String username;
-    String password;
-    String email;
-    String phone;
     String fullname;
-    LocalDate birthday;
-    String role;
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    Cart cart;
+    String phone;
+    String provincecode;
+    String provincename;
+    String districtcode;
+    String districtname;
+    String wardcode;
+    String wardname;
+    String detail;
+    Boolean isdefault;
+    @ManyToOne
+    @JoinColumn(name = "userid", referencedColumnName = "id")
+    User user;
 }
