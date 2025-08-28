@@ -27,11 +27,33 @@ public class AddressController {
                 .build();
     }
 
+    @GetMapping("/default")
+    public ApiResponse<AddressResponse> getDefaultAddress(){
+        return ApiResponse.<AddressResponse>builder()
+                .result(addressService.getDefaultAddress())
+                .build();
+    }
+
     @PostMapping
-    public ApiResponse addAddress(@RequestBody AddressRequest request){
-        addressService.createAddress(request);
+    public ApiResponse addOrUpdateAddress(@RequestBody AddressRequest request){
+        String msg = addressService.addOrUpdateAddress(request);
         return ApiResponse.builder()
-                .message("Thêm địa chỉ thành công")
+                .message(msg)
+                .build();
+    }
+
+    @GetMapping("/{addressId}")
+    public ApiResponse<AddressResponse> getAddress(@PathVariable("addressId") String addressId){
+        return ApiResponse.<AddressResponse>builder()
+                .result(addressService.getAddress(addressId))
+                .build();
+    }
+
+    @DeleteMapping("/{addressId}")
+    public ApiResponse deleteAddress(@PathVariable("addressId") String addressId){
+        addressService.deleteAddress(addressId);
+        return ApiResponse.builder()
+                .message("Địa chỉ đã được xóa")
                 .build();
     }
 }

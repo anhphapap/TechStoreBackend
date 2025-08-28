@@ -63,12 +63,12 @@ public class CartService {
         return items.stream().map(cartItemMapper::toCartItem).collect(Collectors.toList());
     }
 
-    public List<CartItemResponse> mergeCart(List<CartItemRequest> cartItemRequests){
+    public List<CartItemResponse> mergeCart(List<CartItemRequest> cartItemRequests) {
         SecurityContext context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
-        User user = userRepository.findByUsername(name).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        List<CartItem> items = cartItemRepository.findCartItemsByCartId(user.getCart().getId());
-        List<CartItemResponse> responses = new ArrayList<>();
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+
         Cart cart = user.getCart();
 
         for (CartItemRequest req : cartItemRequests) {
@@ -88,18 +88,19 @@ public class CartService {
                 cartItem.setQuantity(req.getQuantity());
             }
 
-            CartItem saved = cartItemRepository.save(cartItem);
-
-            CartItemResponse resp = CartItemResponse.builder()
-                    .quantity(saved.getQuantity())
-                    .productName(saved.getProduct().getName())
-                    .productImage(saved.getProduct().getImage())
-                    .productPrice(saved.getProduct().getPrice())
-                    .productId(saved.getProduct().getId())
-                    .build();
-
-            responses.add(resp);
+            cartItemRepository.save(cartItem);
         }
-        return responses;
+
+        List<CartItem> updatedItems = cartItemRepository.findCartItemsByCartId(cart.getId());
+
+        return updatedItems.stream()
+                .map(item -> CartItemResponse.builder()
+                        .quantity(item.getQuantity())
+                        .productName(item.getProduct().getName())
+                        .productImage(item.getProduct().getImage())
+                        .productPrice(item.getProduct().getPrice())
+                        .productId(item.getProduct().getId())
+                        .build())
+                .toList();
     }
 }

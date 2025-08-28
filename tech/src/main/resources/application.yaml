@@ -4,12 +4,24 @@ server:
     context-path: /tech
 
 spring:
+  config:
+    import: optional:file:./local.properties
   datasource:
-    url: "jdbc:mysql://localhost:3306/techdb"
-    username: root
-    password: Admin@123
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     show-sql: true
 
 jwt:
-  signerKey: "JT1u3UntCMv2FeJDKiAfNLwJYmujvLb+/GMYR69NYNhYZpJkGNTPAyNSk7tlJyRL"
+  signerKey: ${SIGNER_KEY}
+
+payment:
+  vnPay:
+    url: ${PAY_URL}
+    tmnCode: ${TMN_CODE}
+    secretKey: ${SECRET_KEY}
+    returnUrl: ${RETURN_URL}
+    version: ${VERSION}
+    command: ${COMMAND}
+    orderType: ${ORDER_TYPE}
