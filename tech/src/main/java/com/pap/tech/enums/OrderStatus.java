@@ -1,6 +1,6 @@
 package com.pap.tech.enums;
 
-public enum PaymentStatus {
+public enum OrderStatus {
     PENDING,
     PAID,
     SHIPPED,

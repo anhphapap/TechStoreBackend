@@ -3,8 +3,7 @@ package com.pap.tech.controller;
 import com.pap.tech.dto.response.ApiResponse;
 import com.pap.tech.dto.response.PaymentResponse;
 import com.pap.tech.entity.Order;
-import com.pap.tech.enums.PaymentStatus;
-import com.pap.tech.exception.ErrorCode;
+import com.pap.tech.enums.OrderStatus;
 import com.pap.tech.service.OrderService;
 import com.pap.tech.service.PaymentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,21 +37,16 @@ public class PaymentController {
         String status = request.getParameter("vnp_ResponseCode");
         String txnRef = request.getParameter("vnp_TxnRef");
         String payDateStr = request.getParameter("vnp_PayDate");
-        Enumeration<String> paramNames = request.getParameterNames();
-        while (paramNames.hasMoreElements()) {
-            String paramName = paramNames.nextElement();
-            String paramValue = request.getParameter(paramName);
-            System.out.println(paramName + " = " + paramValue);
-        }
+        Order order = orderService.getOrderByVnpTxnRef(txnRef);
 
-        String redirectUrl = "http://localhost:3000/payment-result";
+        String redirectUrl = "http://localhost:5173/payment-result";
 
         if (status.equals("00")) {
-            orderService.updateOrder(txnRef, payDateStr , PaymentStatus.PAID);
-            redirectUrl += "?status=success&orderId=" + txnRef;
+            orderService.updatePaymentOrder(order.getId(), payDateStr , OrderStatus.PAID, Boolean.TRUE);
+            redirectUrl += "?status=success&orderId=" + order.getId();
         } else {
-            orderService.updateOrder(txnRef, payDateStr, PaymentStatus.CANCELLED);
-            redirectUrl += "?status=fail&orderId=" + txnRef;
+            orderService.updatePaymentOrder(order.getId(), payDateStr, OrderStatus.PENDING, Boolean.FALSE);
+            redirectUrl += "?status=fail&orderId=" + order.getId();
         }
 
         response.sendRedirect(redirectUrl);

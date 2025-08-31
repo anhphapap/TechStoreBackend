@@ -8,8 +8,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDetailRequest {
-    Long price;
-    int quantity;
-    String productId;
+public class UpdateRepaidRequest {
+    String vnpTxnref;
 }

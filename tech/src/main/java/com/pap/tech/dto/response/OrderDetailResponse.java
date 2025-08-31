@@ -1,4 +1,4 @@
-package com.pap.tech.dto.request;
+package com.pap.tech.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,8 +8,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDetailRequest {
+public class OrderDetailResponse {
+    String productId;
+    String productImage;
+    String productName;
     Long price;
     int quantity;
-    String productId;
 }
