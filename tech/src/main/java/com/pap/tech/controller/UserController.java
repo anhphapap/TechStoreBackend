@@ -18,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -74,6 +75,13 @@ public class UserController {
     ApiResponse<UserResponse> getUserProfile(){
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getProfile())
+                .build();
+    }
+
+    @GetMapping("/stats")
+    ApiResponse<Map<String, Long>> getStats(){
+        return ApiResponse.<Map<String, Long>>builder()
+                .result(userService.getUserStats())
                 .build();
     }
 }

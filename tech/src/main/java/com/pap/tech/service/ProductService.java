@@ -18,9 +18,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -61,5 +63,13 @@ public class ProductService{
                 .productImages(listImages.stream().map(productImageMapper::toProductImageResponse).collect(Collectors.toList()))
                 .productAttributes(listAttributes.stream().map(productAttributeMapper::toProductAttributeResponse).collect(Collectors.toList()))
                 .build();
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public Map<String, Object> getProductStats(){
+        long total = productRepository.count();
+        return Map.of(
+                "total", total
+        );
     }
 }

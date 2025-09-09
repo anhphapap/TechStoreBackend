@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 @Service
@@ -14,7 +15,8 @@ import java.util.Map;
 public class PaymentService {
     private final VNPayConfig vnPayConfig;
     public PaymentResponse createVnPayPayment(HttpServletRequest request) {
-        long amount = Integer.parseInt(request.getParameter("amount")) * 100L;
+        BigDecimal amountDecimal = new BigDecimal(request.getParameter("amount"));
+        long amount = amountDecimal.multiply(BigDecimal.valueOf(100)).longValue();
         String bankCode = request.getParameter("bankCode");
         Map<String, String> vnpParamsMap = vnPayConfig.getVNPayConfig();
         vnpParamsMap.put("vnp_Amount", String.valueOf(amount));

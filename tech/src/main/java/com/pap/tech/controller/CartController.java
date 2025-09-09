@@ -45,4 +45,11 @@ public class CartController {
                 .build();
     }
 
+    @DeleteMapping("/{productId}")
+    public ApiResponse<List<CartItemResponse>> deleteCartItem(@PathVariable String productId) {
+        return ApiResponse.<List<CartItemResponse>>builder()
+                .result(cartService.deleteCartItem(productId))
+                .build();
+    }
+
 }

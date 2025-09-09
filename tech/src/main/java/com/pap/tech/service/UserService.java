@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -93,4 +94,11 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public Map<String, Long> getUserStats(){
+        long total = userRepository.count();
+        return Map.of(
+                "total", total
+        );
+    }
 }

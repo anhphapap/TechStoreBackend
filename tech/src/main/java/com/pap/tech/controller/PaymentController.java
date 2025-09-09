@@ -39,14 +39,25 @@ public class PaymentController {
         String payDateStr = request.getParameter("vnp_PayDate");
         Order order = orderService.getOrderByVnpTxnRef(txnRef);
 
-        String redirectUrl = "http://localhost:5173/payment-result";
+        String baseUrl = "http://localhost:5173/payment-result";
+        String redirectUrl;
 
         if (status.equals("00")) {
-            orderService.updatePaymentOrder(order.getId(), payDateStr , OrderStatus.PAID, Boolean.TRUE);
-            redirectUrl += "?status=success&orderId=" + order.getId();
+            orderService.updatePaymentOrder(order.getId(), payDateStr, OrderStatus.PAID, Boolean.TRUE);
+            redirectUrl = String.format(
+                    "%s?status=success&orderId=%s&totalAmount=%s",
+                    baseUrl,
+                    order.getId(),
+                    order.getTotalamount()
+            );
         } else {
             orderService.updatePaymentOrder(order.getId(), payDateStr, OrderStatus.PENDING, Boolean.FALSE);
-            redirectUrl += "?status=fail&orderId=" + order.getId();
+            redirectUrl = String.format(
+                    "%s?status=fail&orderId=%s&totalAmount=%s",
+                    baseUrl,
+                    order.getId(),
+                    order.getTotalamount()
+            );
         }
 
         response.sendRedirect(redirectUrl);

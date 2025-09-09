@@ -104,5 +104,15 @@ public class CartService {
                 .toList();
     }
 
+    public List<CartItemResponse> deleteCartItem(String productId) {
+        SecurityContext context = SecurityContextHolder.getContext();
+        String name = context.getAuthentication().getName();
+        User user = userRepository.findByUsername(name)
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        CartItem ci = cartItemRepository.findByCartIdAndProductId(user.getCart().getId(), productId).orElseThrow(() -> new AppException(ErrorCode.CART_ITEM_NOT_FOUND));
+        cartItemRepository.deleteById(ci.getId());
+        List<CartItem> items = cartItemRepository.findCartItemsByCartId(user.getCart().getId());
+        return items.stream().map(cartItemMapper::toCartItem).collect(Collectors.toList());
+    }
 
 }
