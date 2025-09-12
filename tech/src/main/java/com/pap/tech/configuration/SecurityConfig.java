@@ -28,7 +28,7 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS = {"/users","/auth/login", "/auth/introspect", "/products/*/reviews", "/products/*/reviews/stats"};
+    private final String[] PUBLIC_ENDPOINTS = {"/users","/auth/login", "/auth/introspect"};
 
     @Value("${jwt.signerKey}")
     private String signerKey;
@@ -40,7 +40,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(requests ->
                 requests.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS ).permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products/**", "/payment/vn-pay-callback" ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/products/**", "/payment/vn-pay-callback", "/categories/**", "/brands").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 ->

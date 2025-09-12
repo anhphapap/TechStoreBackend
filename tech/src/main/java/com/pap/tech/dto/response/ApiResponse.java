@@ -19,4 +19,5 @@ public class ApiResponse <T>{
     Integer pageSize;
     Integer totalPages;
     Integer totalCount;
+    String categoryName;
 }

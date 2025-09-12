@@ -1,6 +1,7 @@
 package com.pap.tech.dto.response;
 
-import com.pap.tech.entity.Product;
+import com.pap.tech.entity.Category;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -11,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ProductResponse {
-    ListProductResponse product;
-    List<ProductImageResponse> productImages;
-    List<ProductAttributeResponse> productAttributes;
+public class CategoryResponse {
+    String id;
+    String name;
+    private List<CategoryResponse> children;
 }

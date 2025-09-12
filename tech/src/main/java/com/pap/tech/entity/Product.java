@@ -1,9 +1,6 @@
 package com.pap.tech.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,4 +19,11 @@ public class Product {
     String image;
     double avgRating;
     int ratingCount;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryid", nullable = false)
+    Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "brandid")
+    Brand brand;
 }

@@ -8,6 +8,7 @@ import com.pap.tech.exception.AppException;
 import com.pap.tech.exception.ErrorCode;
 import com.pap.tech.mapper.ProductAttributeMapper;
 import com.pap.tech.mapper.ProductImageMapper;
+import com.pap.tech.mapper.ProductMapper;
 import com.pap.tech.repository.ProductAttributeRepository;
 import com.pap.tech.repository.ProductImageRepository;
 import com.pap.tech.repository.ProductRepository;
@@ -36,6 +37,7 @@ public class ProductService{
     ProductAttributeRepository productAttributeRepository;
     ProductImageMapper productImageMapper;
     ProductAttributeMapper productAttributeMapper;
+    ProductMapper productMapper;
 
     public Page<Product> getProducts(String sort, int page, String search) {
         Sort sortConfig = Sort.unsorted();
@@ -59,7 +61,7 @@ public class ProductService{
         List<ProductImage> listImages = productImageRepository.findByProduct_Id(id, Sort.by(Sort.Direction.ASC, "url"));
         List<ProductAttribute> listAttributes = productAttributeRepository.findByProduct_Id(id);
         return ProductResponse.builder()
-                .product(product)
+                .product(productMapper.toListProductResponse(product))
                 .productImages(listImages.stream().map(productImageMapper::toProductImageResponse).collect(Collectors.toList()))
                 .productAttributes(listAttributes.stream().map(productAttributeMapper::toProductAttributeResponse).collect(Collectors.toList()))
                 .build();

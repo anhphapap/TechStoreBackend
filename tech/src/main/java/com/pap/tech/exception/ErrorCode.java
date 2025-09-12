@@ -19,6 +19,7 @@ public enum ErrorCode {
     ADDRESS_NOT_FOUND(1010, "Không tìm thấy địa chỉ", HttpStatus.BAD_REQUEST),
     PAYMENT_FAILED(1011, "Thanh toán không thành công", HttpStatus.BAD_REQUEST),
     CART_ITEM_NOT_FOUND(1012, "Không tìm thấy sản phẩm trong giỏ", HttpStatus.BAD_REQUEST),
+    CATE_NOT_FOUND(1013, "Không tìm danh mục", HttpStatus.BAD_REQUEST),
     ;
 
     ErrorCode(int code, String message, HttpStatusCode statusCode) {
