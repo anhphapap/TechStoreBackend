@@ -1,5 +1,6 @@
 package com.pap.tech.service;
 
+import com.pap.tech.dto.response.ListProductResponse;
 import com.pap.tech.dto.response.ProductResponse;
 import com.pap.tech.entity.Product;
 import com.pap.tech.entity.ProductAttribute;
@@ -39,7 +40,7 @@ public class ProductService{
     ProductAttributeMapper productAttributeMapper;
     ProductMapper productMapper;
 
-    public Page<Product> getProducts(String sort, int page, String search) {
+    public Page<ListProductResponse> getProducts(String sort, int page, String search) {
         Sort sortConfig = Sort.unsorted();
 
         if (sort != null && !sort.isEmpty()) {
@@ -50,10 +51,14 @@ public class ProductService{
         Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE, sortConfig);
 
         if (search != null && !search.isEmpty()) {
-            return productRepository.findByNameContainingIgnoreCase(search, pageable);
+            return productRepository.findByNameContainingIgnoreCase(search, pageable).map(productMapper::toListProductResponse);
         }
 
-        return productRepository.findAll(pageable);
+        return  productRepository.findAll(pageable).map(productMapper::toListProductResponse);
+    }
+
+    public List<ListProductResponse> getAllProducts() {
+        return productRepository.findAll().stream().map(productMapper::toListProductResponse).collect(Collectors.toList());
     }
 
     public ProductResponse getProduct(String id) {

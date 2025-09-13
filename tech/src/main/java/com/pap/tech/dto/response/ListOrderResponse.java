@@ -17,5 +17,7 @@ public class ListOrderResponse {
     BigDecimal totalamount;
     String vnpTxnref;
     Boolean paymentstatus;
+    BigDecimal discountamount;
+    String discountcode;
     List<OrderDetailResponse> orderDetails;
 }

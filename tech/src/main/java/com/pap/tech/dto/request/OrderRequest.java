@@ -22,5 +22,7 @@ public class OrderRequest {
     String userId;
     String addressId;
     Boolean paymentstatus;
+    BigDecimal discountamount;
+    String discountcode;
     List<OrderDetailRequest> orderDetails;
 }

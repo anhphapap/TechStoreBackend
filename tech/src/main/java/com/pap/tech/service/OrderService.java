@@ -117,6 +117,8 @@ public class OrderService {
             res.setVnpTxnref(order.getVnpTxnref());
             res.setPaymentstatus(order.getPaymentstatus());
             res.setStatus(order.getStatus().name());
+            res.setDiscountcode(order.getDiscountcode());
+            res.setDiscountamount(order.getDiscountamount());
             List<OrderDetailResponse> details = orderDetailRepository.findByOrderId(order.getId()).stream()
                     .map(orderDetailMapper::toOrderDetailResponse)
                     .collect(Collectors.toList());

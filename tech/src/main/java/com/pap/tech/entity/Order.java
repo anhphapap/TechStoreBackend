@@ -27,6 +27,8 @@ public class Order {
     PaymentMethod paymentmethod;
     @Column(precision = 18, scale = 2, nullable = false)
     BigDecimal totalamount;
+    BigDecimal discountamount;
+    String discountcode;
     String shippingaddress;
     String vnpTxnref;
     LocalDateTime vnpPaydate;

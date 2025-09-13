@@ -45,18 +45,20 @@ public class PaymentController {
         if (status.equals("00")) {
             orderService.updatePaymentOrder(order.getId(), payDateStr, OrderStatus.PAID, Boolean.TRUE);
             redirectUrl = String.format(
-                    "%s?status=success&orderId=%s&totalAmount=%s",
+                    "%s?status=success&orderId=%s&totalAmount=%s&discountAmount=%s",
                     baseUrl,
                     order.getId(),
-                    order.getTotalamount()
+                    order.getTotalamount(),
+                    order.getDiscountamount()
             );
         } else {
             orderService.updatePaymentOrder(order.getId(), payDateStr, OrderStatus.PENDING, Boolean.FALSE);
             redirectUrl = String.format(
-                    "%s?status=fail&orderId=%s&totalAmount=%s",
+                    "%s?status=fail&orderId=%s&totalAmount=%s&discountAmount=%s",
                     baseUrl,
                     order.getId(),
-                    order.getTotalamount()
+                    order.getTotalamount(),
+                    order.getDiscountamount()
             );
         }
 

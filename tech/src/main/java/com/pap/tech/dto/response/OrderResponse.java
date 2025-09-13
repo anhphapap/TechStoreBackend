@@ -25,5 +25,7 @@ public class OrderResponse {
     LocalDateTime cancelleddate;
     String paymentmethod;
     String shippingaddress;
+    BigDecimal discountamount;
+    String discountcode;
     LocalDateTime vnpPaydate;
 }

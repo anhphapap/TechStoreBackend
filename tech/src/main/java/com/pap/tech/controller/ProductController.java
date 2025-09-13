@@ -1,6 +1,7 @@
 package com.pap.tech.controller;
 
 import com.pap.tech.dto.response.ApiResponse;
+import com.pap.tech.dto.response.ListProductResponse;
 import com.pap.tech.dto.response.ProductResponse;
 import com.pap.tech.entity.Product;
 import com.pap.tech.enums.OrderStatus;
@@ -29,11 +30,11 @@ public class ProductController {
     ReviewRepository reviewRepository;
 
     @GetMapping
-    ApiResponse<List<Product>>  getProducts( @RequestParam(defaultValue = "1") int page,
-                                             @RequestParam(defaultValue = "") String sort,
-                                             @RequestParam(defaultValue = "") String search){
-        Page<Product> productPage = productService.getProducts(sort, page, search);
-        return ApiResponse.<List<Product>>builder()
+    ApiResponse<List<ListProductResponse>>  getProducts(@RequestParam(defaultValue = "1") int page,
+                                                        @RequestParam(defaultValue = "") String sort,
+                                                        @RequestParam(defaultValue = "") String search){
+        Page<ListProductResponse> productPage = productService.getProducts(sort, page, search);
+        return ApiResponse.<List<ListProductResponse>>builder()
                 .result(productPage.getContent())
                 .page(page)
                 .pageSize(productPage.getSize())
@@ -41,6 +42,14 @@ public class ProductController {
                 .totalCount((int)productPage.getTotalElements())
                 .build();
     }
+
+    @GetMapping("/all")
+    public ApiResponse<List<ListProductResponse>> getAllProducts() {
+        return ApiResponse.<List<ListProductResponse>>builder()
+                .result(productService.getAllProducts())
+                .build();
+    }
+
 
     @GetMapping("/{id}")
     ApiResponse<ProductResponse> getProduct( @PathVariable String id){
