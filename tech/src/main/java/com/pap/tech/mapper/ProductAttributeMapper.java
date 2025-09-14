@@ -8,5 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ProductAttributeMapper {
     @Mapping(source = "attribute.name", target = "name")
+    @Mapping(source = "attribute.id", target = "attributeId")
     ProductAttributeResponse toProductAttributeResponse(ProductAttribute productAttribute);
 }

@@ -1,5 +1,6 @@
 package com.pap.tech.controller;
 
+import com.pap.tech.dto.request.AdminUserRequest;
 import com.pap.tech.dto.request.UserCreationRequest;
 import com.pap.tech.dto.request.UserUpdateRequest;
 import com.pap.tech.dto.response.ApiResponse;
@@ -36,6 +37,13 @@ public class UserController {
         apiResponse.setResult(userMapper.toUserResponse(userService.createUser(request)));
         return apiResponse;
     }
+    @PostMapping("/admin")
+    ApiResponse createAdminUser(@RequestBody @Valid AdminUserRequest request){
+        userService.createUserAdmin(request);
+        return ApiResponse.builder()
+                .message("Thêm người dùng thành công!")
+                .build();
+    }
 
     @GetMapping
     ApiResponse<List<UserResponse>> getUsers(){
@@ -46,8 +54,7 @@ public class UserController {
 
         return ApiResponse.<List<UserResponse>>builder()
                 .result(userService.getUsers())
-                .build();
-    }
+                .build();    }
 
     @GetMapping("/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId){
@@ -60,6 +67,13 @@ public class UserController {
     ApiResponse<UserResponse> updateUser(@PathVariable("userId") String userId, @RequestBody @Valid UserUpdateRequest request){
         return ApiResponse.<UserResponse>builder()
                 .result(userService.updateRequest(userId, request))
+                .build();
+    }
+
+    @GetMapping("/{userId}/ban")
+    ApiResponse banUser(@PathVariable("userId") String userId){
+        return ApiResponse.builder()
+                .result(userService.banUser(userId))
                 .build();
     }
 

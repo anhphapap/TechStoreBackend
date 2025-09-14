@@ -1,5 +1,6 @@
 package com.pap.tech.repository;
 
+import com.pap.tech.entity.Product;
 import com.pap.tech.entity.ProductImage;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,4 +9,6 @@ import java.util.List;
 
 public interface ProductImageRepository extends JpaRepository<ProductImage, String> {
     List<ProductImage> findByProduct_Id(String productId, Sort sort);
+
+    void deleteAllByProduct(Product product);
 }

@@ -13,6 +13,11 @@ import java.util.List;
 import java.util.Map;
 
 public interface OrderRepository extends JpaRepository<Order, String> {
+    @Query("SELECT MONTH(o.orderdate), SUM(o.totalamount) " +
+            "FROM Order o " +
+            "WHERE YEAR(o.orderdate) = :year AND o.status = 'DELIVERED' " +
+            "GROUP BY MONTH(o.orderdate)")
+    List<Object[]> getMonthlyRevenue(@Param("year") int year);
     Order findOrderByVnpTxnref(String vnpTxnref);
     @Query("SELECT o FROM Order o " +
             "WHERE o.user.username = :username " +

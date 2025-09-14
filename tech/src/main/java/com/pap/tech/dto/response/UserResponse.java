@@ -20,4 +20,5 @@ public class UserResponse {
     LocalDate birthday;
     String role;
     String cartId;
+    Boolean active;
 }

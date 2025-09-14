@@ -19,6 +19,7 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
@@ -29,6 +30,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -130,7 +132,7 @@ public class OrderService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public Page<AdminOrderResponse> getOrders(String status, int page, String query){
-        Pageable pageable = PageRequest.of(page - 1, PAGE_SIZE);
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(Sort.Direction.DESC, "orderdate"));
         OrderStatus s = null;
         switch (status) {
             case "PAID":
@@ -221,5 +223,12 @@ public class OrderService {
         );
     }
 
-
+    public Map<Integer, BigDecimal> getMonthlyRevenue(int year) {
+        List<Object[]> rows = orderRepository.getMonthlyRevenue(year);
+        Map<Integer, BigDecimal> result = new HashMap<>();
+        for (Object[] row : rows) {
+            result.put((Integer) row[0], (BigDecimal) row[1]);
+        }
+        return result;
+    }
 }

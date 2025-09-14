@@ -45,6 +45,14 @@ public class OrderController {
                 .build();
     }
 
+    @GetMapping("/admin/revenue")
+    public ApiResponse<?> getRevenue(@RequestParam int year) {
+        return ApiResponse.builder()
+                .result(orderService.getMonthlyRevenue(year))
+                .build();
+    }
+
+
     @GetMapping("/admin")
     public ApiResponse<List<AdminOrderResponse>> findAllOrders(@RequestParam(defaultValue = "1") int page,
                                                                @RequestParam(defaultValue = "") String status,

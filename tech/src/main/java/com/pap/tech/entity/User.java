@@ -23,6 +23,7 @@ public class User {
     String fullname;
     LocalDate birthday;
     String role;
+    Boolean active;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     Cart cart;
 }

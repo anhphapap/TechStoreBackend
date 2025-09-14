@@ -38,7 +38,7 @@ public class CategoryService {
     }
 
     public String getCategoryName(String id){
-        return categoryRepository.findById(id).getName();
+        return categoryRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.CATE_NOT_FOUND)).getName();
     }
 
     public Page<ListProductResponse> getProductsByCategorySlug(
@@ -48,7 +48,7 @@ public class CategoryService {
             Long maxPrice,
             Pageable pageable
     ) {
-        Category category = categoryRepository.findById(slug);
+        Category category = categoryRepository.findById(slug).orElseThrow(() -> new AppException(ErrorCode.CATE_NOT_FOUND));
 
         List<String> categoryIds = getAllCategoryIds(category);
 

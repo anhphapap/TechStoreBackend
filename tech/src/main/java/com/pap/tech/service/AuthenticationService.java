@@ -55,6 +55,10 @@ public class AuthenticationService {
             throw new AppException(ErrorCode.UNAUTHENTICATED);
         }
 
+        if(!user.getActive()){
+            throw new AppException(ErrorCode.UNAUTHORIZED);
+        }
+
         var token = generateToken(user);
 
         return AuthenticationResponse.builder()

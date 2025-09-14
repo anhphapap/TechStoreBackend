@@ -1,5 +1,6 @@
 package com.pap.tech.controller;
 
+import com.pap.tech.dto.request.ProductRequest;
 import com.pap.tech.dto.response.ApiResponse;
 import com.pap.tech.dto.response.ListProductResponse;
 import com.pap.tech.dto.response.ProductResponse;
@@ -43,6 +44,15 @@ public class ProductController {
                 .build();
     }
 
+    @PostMapping
+    ApiResponse addProduct(@RequestBody ProductRequest product){
+        Product p = productService.createProduct(product);
+        return ApiResponse.builder()
+                .result(p.getId())
+                .message("Thêm sản phẩm thaành công")
+                .build();
+    }
+
     @GetMapping("/all")
     public ApiResponse<List<ListProductResponse>> getAllProducts() {
         return ApiResponse.<List<ListProductResponse>>builder()
@@ -55,6 +65,22 @@ public class ProductController {
     ApiResponse<ProductResponse> getProduct( @PathVariable String id){
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.getProduct(id))
+                .build();
+    }
+
+    @DeleteMapping("/{id}")
+    ApiResponse deleteProduct(@PathVariable String id){
+        productService.deleteProduct(id);
+        return ApiResponse.builder()
+                .message("Xóa sản pẩm thành công")
+                .build();
+    }
+
+    @PutMapping("/{id}")
+    ApiResponse updateProduct(@PathVariable String id, @RequestBody ProductResponse product){
+        productService.updateProduct(id, product);
+        return ApiResponse.builder()
+                .message("Cập nhập sản phẩm thành công")
                 .build();
     }
 

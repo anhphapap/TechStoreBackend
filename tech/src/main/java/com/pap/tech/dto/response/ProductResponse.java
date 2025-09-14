@@ -15,4 +15,6 @@ public class ProductResponse {
     ListProductResponse product;
     List<ProductImageResponse> productImages;
     List<ProductAttributeResponse> productAttributes;
+    String categoryId;
+    String brandId;
 }

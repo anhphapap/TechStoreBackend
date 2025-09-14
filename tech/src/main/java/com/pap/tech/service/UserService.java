@@ -1,5 +1,6 @@
 package com.pap.tech.service;
 
+import com.pap.tech.dto.request.AdminUserRequest;
 import com.pap.tech.dto.request.UserCreationRequest;
 import com.pap.tech.dto.request.UserUpdateRequest;
 import com.pap.tech.dto.response.UserResponse;
@@ -50,6 +51,7 @@ public class UserService {
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER.name());
+        user.setActive(true);
 
         userRepository.save(user);
 
@@ -63,6 +65,35 @@ public class UserService {
         return user;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public User createUserAdmin(AdminUserRequest request){
+        if(userRepository.existsByUsername(request.getUsername())){
+            throw new AppException(ErrorCode.USERNAME_EXISTED);
+        }
+
+        if(userRepository.existsByEmail(request.getEmail())){
+            throw new AppException(ErrorCode.EMAIL_EXISTED);
+        }
+
+        User user = userMapper.toUserAdmin(request);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRole(request.getRole().equals("ADMIN")? Role.ADMIN.name() : Role.USER.name());
+        user.setActive(true);
+
+        userRepository.save(user);
+
+        Cart cart = Cart.builder()
+                .user(user)
+                .build();
+        cartRepository.save(cart);
+
+        user.setCart(cart);
+
+        return user;
+    }
+
+
+
     public UserResponse getProfile(){
         SecurityContext context = SecurityContextHolder.getContext();
         String name = context.getAuthentication().getName();
@@ -70,12 +101,23 @@ public class UserService {
         return userMapper.toUserResponse(user);
     }
 
-    @PostAuthorize("returnObject.username == authentication.name")
+    @PreAuthorize("hasRole('ADMIN') or #userId == authentication.principal.id")
     public UserResponse updateRequest(String userId,UserUpdateRequest request){
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
         userMapper.updateUser(user, request);
         userRepository.save(user);
         return  userMapper.toUserResponse(user);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public UserResponse banUser(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy người dùng"));
+
+        user.setActive(!user.getActive());
+        userRepository.save(user);
+
+        return userMapper.toUserResponse(user);
     }
 
     @PreAuthorize("hasRole('ADMIN')")

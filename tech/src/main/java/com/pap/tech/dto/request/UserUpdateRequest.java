@@ -12,8 +12,14 @@ import java.time.LocalDate;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserUpdateRequest {
+    String id;
+    String username;
+    String email;
     String phone;
     String address;
     String fullname;
     LocalDate birthday;
+    String role;
+    String cartId;
+    Boolean active;
 }
