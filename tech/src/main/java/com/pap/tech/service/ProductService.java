@@ -42,6 +42,7 @@ public class ProductService{
     CategoryRepository categoryRepository;
     BrandRepository brandRepository;
     AttributeRepository attributeRepository;
+    OrderDetailRepository orderDetailRepository;
 
     @Transactional
     public Product createProduct(ProductRequest request) {
@@ -194,5 +195,22 @@ public class ProductService{
         return Map.of(
                 "total", total
         );
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<ListProductResponse> getTop5(){
+        Pageable top5 = PageRequest.of(0, 5); // page 0, size 5
+        List<Object[]> top = orderDetailRepository.findTopSellingProducts(top5);
+
+        return top.stream()
+                .map(obj -> {
+                    String productId = (String) obj[0];
+                    Long totalSold = (Long) obj[1];
+                    Product p = productRepository.findById(productId).orElseThrow(()  -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+                    ListProductResponse res = productMapper.toListProductResponse(p);
+                    res.setCount(totalSold);
+                    return res;
+                })
+                .collect(Collectors.toList());
     }
 }

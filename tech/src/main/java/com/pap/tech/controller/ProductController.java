@@ -60,6 +60,13 @@ public class ProductController {
                 .build();
     }
 
+    @GetMapping("/top")
+    public ApiResponse<List<ListProductResponse>> getTop5Products() {
+        return ApiResponse.<List<ListProductResponse>>builder()
+                .result(productService.getTop5())
+                .build();
+    }
+
 
     @GetMapping("/{id}")
     ApiResponse<ProductResponse> getProduct( @PathVariable String id){

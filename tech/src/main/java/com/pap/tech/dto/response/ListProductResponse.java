@@ -15,4 +15,5 @@ public class ListProductResponse {
     String image;
     double avgRating;
     int ratingCount;
+    Long count;
 }
