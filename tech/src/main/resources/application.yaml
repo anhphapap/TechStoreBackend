@@ -6,10 +6,6 @@ server:
 spring:
   config:
     import: optional:file:./local.properties
-  datasource:
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
   jpa:
     show-sql: true
 

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
-    @Mapping(source = "children", target = "children")
+    @Mapping(target = "children", ignore = true)
     CategoryResponse toCategoryResponse(Category category);
 
     List<CategoryResponse> toCategoryResponseList(List<Category> categories);

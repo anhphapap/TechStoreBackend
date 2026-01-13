@@ -7,18 +7,26 @@ import lombok.experimental.FieldDefaults;
 import java.util.List;
 
 @Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
+@Getter @Setter
+@NoArgsConstructor @AllArgsConstructor @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Category {
+
     @Id
+    @Column(length = 100)
     String id;
+
+    @Column(length = 100)
     String name;
+
+    @Column(name = "parentid", length = 100)
+    String parentId;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parentid")
+    @JoinColumn(name = "parentid", insertable = false, updatable = false)
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     Category parent;
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Category> children;
 }
+
+
