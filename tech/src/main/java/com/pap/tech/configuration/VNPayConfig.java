@@ -10,43 +10,59 @@ import java.util.*;
 
 @Configuration
 public class VNPayConfig {
+
     @Getter
     @Value("${payment.vnPay.url}")
     private String vnp_PayUrl;
+
     @Value("${payment.vnPay.returnUrl}")
     private String vnp_ReturnUrl;
+
     @Value("${payment.vnPay.tmnCode}")
-    private String vnp_TmnCode ;
+    private String vnp_TmnCode;
+
     @Getter
     @Value("${payment.vnPay.secretKey}")
     private String secretKey;
+
     @Value("${payment.vnPay.version}")
     private String vnp_Version;
+
     @Value("${payment.vnPay.command}")
     private String vnp_Command;
+
     @Value("${payment.vnPay.orderType}")
     private String orderType;
 
     public Map<String, String> getVNPayConfig() {
         Map<String, String> vnpParamsMap = new HashMap<>();
+
         vnpParamsMap.put("vnp_Version", this.vnp_Version);
         vnpParamsMap.put("vnp_Command", this.vnp_Command);
         vnpParamsMap.put("vnp_TmnCode", this.vnp_TmnCode);
         vnpParamsMap.put("vnp_CurrCode", "VND");
-        vnpParamsMap.put("vnp_TxnRef",  VNPayUtil.getRandomNumber(8));
-        vnpParamsMap.put("vnp_OrderInfo", "Thanh toan don hang:" +  VNPayUtil.getRandomNumber(8));
+        vnpParamsMap.put("vnp_TxnRef", VNPayUtil.getRandomNumber(8));
+        vnpParamsMap.put("vnp_OrderInfo", "Thanh toan don hang:" + VNPayUtil.getRandomNumber(8));
         vnpParamsMap.put("vnp_OrderType", this.orderType);
         vnpParamsMap.put("vnp_Locale", "vn");
         vnpParamsMap.put("vnp_ReturnUrl", this.vnp_ReturnUrl);
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+
+        TimeZone tz = TimeZone.getTimeZone("Asia/Ho_Chi_Minh");
+        Calendar calendar = Calendar.getInstance(tz);
+
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+        formatter.setTimeZone(tz);
+
         String vnpCreateDate = formatter.format(calendar.getTime());
         vnpParamsMap.put("vnp_CreateDate", vnpCreateDate);
+
         calendar.add(Calendar.MINUTE, 15);
-        String vnp_ExpireDate = formatter.format(calendar.getTime());
-        vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
-        System.out.println("SERVER TIME=" + new Date());
-        System.out.println("EXPIRE=" + vnp_ExpireDate);
+        String vnpExpireDate = formatter.format(calendar.getTime());
+        vnpParamsMap.put("vnp_ExpireDate", vnpExpireDate);
+        
+        System.out.println("VN SERVER TIME = " + vnpCreateDate);
+        System.out.println("VN EXPIRE TIME = " + vnpExpireDate);
+
         return vnpParamsMap;
     }
 }
