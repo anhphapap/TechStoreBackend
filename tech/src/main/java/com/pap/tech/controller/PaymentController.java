@@ -39,7 +39,7 @@ public class PaymentController {
         String payDateStr = request.getParameter("vnp_PayDate");
         Order order = orderService.getOrderByVnpTxnRef(txnRef);
 
-        String baseUrl = "http://localhost:5173/payment-result";
+        String baseUrl = "https://tech-store-frontend-tau.vercel.app/payment-result";
         String redirectUrl;
 
         if (status.equals("00")) {
