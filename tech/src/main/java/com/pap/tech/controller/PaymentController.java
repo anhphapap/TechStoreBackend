@@ -42,6 +42,13 @@ public class PaymentController {
         String baseUrl = "https://tech-store-frontend-tau.vercel.app/payment-result";
         String redirectUrl;
 
+        Enumeration<String> params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String param = params.nextElement();
+            System.out.println(param + "=" + request.getParameter(param));
+        }
+
+
         if (status.equals("00")) {
             orderService.updatePaymentOrder(order.getId(), payDateStr, OrderStatus.PAID, Boolean.TRUE);
             redirectUrl = String.format(

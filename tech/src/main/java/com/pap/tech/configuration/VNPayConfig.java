@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
 @Configuration
 public class VNPayConfig {
@@ -48,6 +45,8 @@ public class VNPayConfig {
         calendar.add(Calendar.MINUTE, 15);
         String vnp_ExpireDate = formatter.format(calendar.getTime());
         vnpParamsMap.put("vnp_ExpireDate", vnp_ExpireDate);
+        System.out.println("SERVER TIME=" + new Date());
+        System.out.println("EXPIRE=" + vnp_ExpireDate);
         return vnpParamsMap;
     }
 }
